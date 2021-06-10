@@ -23,6 +23,19 @@ const sampleStatement1 = {
   type: 'deposit'
 } as ICreateStatementDTO;
 
+const sampleStatement2 = {
+  user_id: '',
+  amount: 100,
+  description: 'teste',
+  type: 'withdraw'
+} as ICreateStatementDTO;
+
+const sampleUser = {
+  name: 'José',
+  email: 'jose@email.com',
+  password: '1234'
+} as ICreateUserDTO;
+
 
 
 
@@ -101,7 +114,5 @@ describe('Operation', () => {
 
     }).rejects.toBeInstanceOf(GetStatementOperationError.UserNotFound);
   });
-
-
 
 });
