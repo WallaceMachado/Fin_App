@@ -17,16 +17,16 @@ let statementRepository: InMemoryStatementsRepository
 let userTest: ICreateUserDTO;
 let createStatement: CreateStatementUseCase;
 
-const sampleStatement1 = {
+const testStatement1 = {
   user_id: '',
   amount: 800,
   description: 'teste',
   type: 'deposit'
 } as ICreateStatementDTO;
 
-const sampleStatement2 = {
+const testStatement2 = {
   user_id: '',
-  amount: 100,
+  amount: 200,
   description: 'teste',
   type: 'withdraw'
 } as ICreateStatementDTO;
@@ -56,12 +56,12 @@ describe('Create Statement', () => {
     const user_id = user.id as string;
 
 
-    sampleStatement1.user_id = user_id;
-    sampleStatement2.user_id = user_id;
+    testStatement1.user_id = user_id;
+    testStatement2.user_id = user_id;
 
-    await createStatement.execute(sampleStatement1);
+    await createStatement.execute(testStatement1);
 
-    const statementOperation = await createStatement.execute(sampleStatement1);
+    const statementOperation = await createStatement.execute(testStatement1);
 
 
     expect(statementOperation).toHaveProperty('id');
@@ -71,26 +71,26 @@ describe('Create Statement', () => {
 
   it('Should not be able to create statement of nonexistent user', () => {
     expect(async () => {
-      await createStatement.execute(sampleStatement2);
+      await createStatement.execute(testStatement2);
     }).rejects.toBeInstanceOf(CreateStatementError.UserNotFound)
   });
 
   it('Should not be able to withdraw more than what user currently have in balance', () => {
     expect(async () => {
       const user = await createUserUseCase.execute({
-        name: 'José',
-        email: 'jose@email.com',
+        name: 'teste',
+        email: 'teste@email.com',
         password: '1234'
       });
 
       const id = user.id as string;
 
-      sampleStatement2.user_id= id as string;
+      testStatement2.user_id = id as string;
 
-      await createStatement.execute(sampleStatement2);
+      await createStatement.execute(testStatement2);
     }).rejects.toBeInstanceOf(CreateStatementError.InsufficientFunds)
   });
-  });
+});
 
 
 

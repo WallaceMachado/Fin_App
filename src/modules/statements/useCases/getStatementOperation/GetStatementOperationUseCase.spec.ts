@@ -16,23 +16,23 @@ let statementRepository: InMemoryStatementsRepository
 let userTest: ICreateUserDTO;
 let createStatement: CreateStatementUseCase;
 
-const sampleStatement1 = {
+const testStatement1 = {
   user_id: '',
-  amount: 100,
-  description: 'Ignite',
+  amount: 1000,
+  description: 'teste',
   type: 'deposit'
 } as ICreateStatementDTO;
 
-const sampleStatement2 = {
+const testStatement2 = {
   user_id: '',
-  amount: 100,
+  amount: 200,
   description: 'teste',
   type: 'withdraw'
 } as ICreateStatementDTO;
 
-const sampleUser = {
-  name: 'José',
-  email: 'jose@email.com',
+const testUser = {
+  name: 'teste',
+  email: 'teste@email.com',
   password: '1234'
 } as ICreateUserDTO;
 
@@ -60,15 +60,15 @@ describe('Operation', () => {
 
   });
 
-  it('Should be able get Balance', async () => {
+  it('Should be able to get statement operation of a user', async () => {
     const user = await createUserUseCase.execute(userTest);
     const user_id = user.id as string;
 
 
-    sampleStatement1.user_id = user_id;
+    testStatement1.user_id = user_id;
 
 
-    const statement = await createStatement.execute(sampleStatement1);
+    const statement = await createStatement.execute(testStatement1);
 
     const statement_id = statement.id as String;
 
@@ -81,12 +81,12 @@ describe('Operation', () => {
 
 
 
-  it('Should not be able to get statement of nonexistent statement_id', () => {
+  it('Should not be able to get nonexistent statement operation', () => {
     expect(async () => {
 
       //const { id: user_id } = await createUserUseCase.execute(userTest);
-      const user_id = sampleStatement1.user_id;
-       await getStatementOperationUseCase.execute({
+      const user_id = testStatement1.user_id;
+      await getStatementOperationUseCase.execute({
         user_id: user_id as string,
         statement_id: 'nonexistent_statement_id'
       });
@@ -107,8 +107,8 @@ describe('Operation', () => {
       };
       const user = await createUserUseCase.execute(userTest);
       const user_id = user.id as string;
-      sampleStatement1.user_id = user_id;
-      const statement = await createStatement.execute(sampleStatement1);
+      testStatement1.user_id = user_id;
+      const statement = await createStatement.execute(testStatement1);
       const statement_id = statement.id as String;
       await getStatementOperationUseCase.execute({ user_id: "idIncorrect", statement_id: statement_id as string });
 

@@ -15,14 +15,14 @@ let statementRepository: InMemoryStatementsRepository
 let userTest: ICreateUserDTO;
 let createStatement: CreateStatementUseCase;
 
-const sampleStatement1 = {
+const testStatement1 = {
   user_id: '',
   amount: 100,
   description: 'Ignite',
   type: 'deposit'
 } as ICreateStatementDTO;
 
-const sampleStatement2 = {
+const testStatement2 = {
   user_id: '',
   amount: 70,
   description: 'Lanche',
@@ -56,11 +56,11 @@ describe('Get Balance', () => {
     const user_id = user.id as string;
 
 
-    sampleStatement1.user_id = user_id;
-    sampleStatement2.user_id = user_id;
+    testStatement1.user_id = user_id;
+    testStatement2.user_id = user_id;
 
-    await createStatement.execute(sampleStatement1);
-    await createStatement.execute(sampleStatement2);
+    await createStatement.execute(testStatement1);
+    await createStatement.execute(testStatement2);
     const balance = await getBalanceUseCase.execute({ user_id: user_id });
 
 
