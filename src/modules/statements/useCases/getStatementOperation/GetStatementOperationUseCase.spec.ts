@@ -23,12 +23,7 @@ const testStatement1 = {
   type: 'deposit'
 } as ICreateStatementDTO;
 
-const testStatement2 = {
-  user_id: '',
-  amount: 200,
-  description: 'teste',
-  type: 'withdraw'
-} as ICreateStatementDTO;
+
 
 const testUser = {
   name: 'teste',
@@ -81,21 +76,7 @@ describe('Operation', () => {
 
 
 
-  it('Should not be able to get nonexistent statement operation', () => {
-    expect(async () => {
-
-      //const { id: user_id } = await createUserUseCase.execute(userTest);
-      const user_id = testStatement1.user_id;
-      await getStatementOperationUseCase.execute({
-        user_id: user_id as string,
-        statement_id: 'nonexistent_statement_id'
-      });
-
-
-
-    }).rejects.toBeInstanceOf(GetStatementOperationError.StatementNotFound);
-  });
-
+  
 
   it('Should not be able to get statement of nonexistent user', () => {
     expect(async () => {
