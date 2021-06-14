@@ -16,6 +16,7 @@ export async function ensureAuthenticated(
 ) {
   const authHeader = request.headers.authorization;
 
+
   if (!authHeader) {
     throw new JWTTokenMissingError()
   }
@@ -28,7 +29,6 @@ export async function ensureAuthenticated(
     request.user = {
       id: user_id,
     };
-
     next();
   } catch {
     throw new JWTInvalidTokenError()
