@@ -1,10 +1,17 @@
 import { Statement } from "../../entities/Statement";
 import { ICreateStatementDTO } from "../../useCases/createStatement/ICreateStatementDTO";
+import { ICreateTransferDTO } from "../../useCases/createTransfer/ICreateTransferDTO";
 import { IGetBalanceDTO } from "../../useCases/getBalance/IGetBalanceDTO";
 import { IGetStatementOperationDTO } from "../../useCases/getStatementOperation/IGetStatementOperationDTO";
 import { IStatementsRepository } from "../IStatementsRepository";
 
 export class InMemoryStatementsRepository implements IStatementsRepository {
+  createTransfer({ user_id, amount, description, type, recipient_id, sender_id }: ICreateTransferDTO): Promise<Statement> {
+    throw new Error("Method not implemented.");
+  }
+  receiveTransfer({ user_id, amount, description, type, recipient_id, sender_id }: ICreateTransferDTO): Promise<Statement> {
+    throw new Error("Method not implemented.");
+  }
   private statements: Statement[] = [];
 
   async create(data: ICreateStatementDTO): Promise<Statement> {

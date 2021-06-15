@@ -70,7 +70,7 @@ describe('Create Statement Controller', () => {
         authorization: `Bearer ${adminToken}`,
       });
 
-    //console.log(response.body);
+    
     expect(response.status).toBe(201);
 
     expect(response.body).toHaveProperty('id');
@@ -93,6 +93,6 @@ describe('Create Statement Controller', () => {
 
   });
 
-  
+
 
 });

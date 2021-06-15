@@ -9,7 +9,8 @@ import { app } from '../../../../app';
 
 let connection: Connection;
 let adminToken: string;
-let iduser: string;
+let userId: string;
+
 
 describe('Create Statement Controller', () => {
   jest.setTimeout(70000);
@@ -18,8 +19,8 @@ describe('Create Statement Controller', () => {
     await connection.runMigrations();
 
     const id = uuidv4();
+    const iduser = '93bcd8af-5494-4e94-b139-0583d238f366';
     const password = await hash('admin', 8);
-    iduser = '93bcd8af-5494-4e94-b139-0583d238f366';
 
     await connection.query(`
     INSERT INTO USERS(id, name, email, password, created_at, updated_at)
@@ -38,8 +39,17 @@ describe('Create Statement Controller', () => {
       values('${iduser}', 'user', 'user@rentx.com', '${password}', 'now()', 'now()')
       `);
     //{ body: responseToken }
+    const responseUser = await request(app)
+      .post('/api/v1/sessions')
+      .send({
+        email: 'user@rentx.com',
+        password: 'user',
+      });
+
+
 
     adminToken = response.body.token;
+    userId = responseUser.body.id
 
 
   });
@@ -49,47 +59,31 @@ describe('Create Statement Controller', () => {
     await connection.close();
   });
 
-  it('Should be able get Balance', async () => {
+  it('Should be able Create Transfer type: deposit', async () => {
 
 
-    await request(app)
+   const deposit =  await request(app)
       .post('/api/v1/statements/deposit')
       .send({ amount: 100.00, description: 'TESTE' })
       .set({
         authorization: `Bearer ${adminToken}`,
       });
 
-    await request(app)
-      .post('/api/v1/statements/withdraw')
-      .send({ amount: 90.00, description: 'teste' })
-      .set({
-        authorization: `Bearer ${adminToken}`,
-      });
-
-    await request(app)
-      .post(`/api/v1/statements/transfer/93bcd8af-5494-4e94-b139-0583d238f366`)
-      .send({ amount: 5.00, description: 'TESTE' })
-      .set({
-        authorization: `Bearer ${adminToken}`,
-      });
+      
 
     const response = await request(app)
-      .get('/api/v1/statements/balance')
-      .send()
+      .post(`/api/v1/statements/transfer/93bcd8af-5494-4e94-b139-0583d238f366`)
+      .send({ amount: 10.00, description: 'TESTE' })
       .set({
         authorization: `Bearer ${adminToken}`,
       });
 
-    
 
-    expect(response.status).toBe(200);
 
-    expect(response.body).toHaveProperty('balance');
+    expect(response.status).toBe(201);
 
-    expect(response.body.balance).toBe(5);
+
   });
-
-
 
 
 

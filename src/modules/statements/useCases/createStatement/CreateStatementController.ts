@@ -6,6 +6,7 @@ import { CreateStatementUseCase } from './CreateStatementUseCase';
 enum OperationType {
   DEPOSIT = 'deposit',
   WITHDRAW = 'withdraw',
+  TRANSFER = 'transfer',
 }
 
 export class CreateStatementController {
@@ -28,7 +29,7 @@ export class CreateStatementController {
       description
     });
 
-   
+
 
     return response.status(201).json(statement);
   }

@@ -2,6 +2,7 @@ import { getRepository, Repository } from "typeorm";
 
 import { Statement } from "../entities/Statement";
 import { ICreateStatementDTO } from "../useCases/createStatement/ICreateStatementDTO";
+import { ICreateTransferDTO } from "../useCases/createTransfer/ICreateTransferDTO";
 import { IGetBalanceDTO } from "../useCases/getBalance/IGetBalanceDTO";
 import { IGetStatementOperationDTO } from "../useCases/getStatementOperation/IGetStatementOperationDTO";
 import { IStatementsRepository } from "./IStatementsRepository";
@@ -19,7 +20,7 @@ export class StatementsRepository implements IStatementsRepository {
     description,
     type
   }: ICreateStatementDTO): Promise<Statement> {
-    
+
     const statement = this.repository.create({
       user_id,
       amount,
@@ -28,6 +29,49 @@ export class StatementsRepository implements IStatementsRepository {
     });
 
     return this.repository.save(statement);
+  }
+
+  async createTransfer({
+    user_id,
+    amount,
+    description,
+    type,
+    recipient_id,
+    sender_id
+  }: ICreateTransferDTO): Promise<Statement> {
+
+
+
+    const transfer = this.repository.create({
+      user_id,
+      recipient_id,
+      amount,
+      description,
+      type
+    });
+
+    return this.repository.save(transfer);
+  }
+
+  async receiveTransfer({
+    user_id,
+    amount,
+    description,
+    type,
+    recipient_id,
+    sender_id
+  }: ICreateTransferDTO): Promise<Statement> {
+
+
+    const transfer = this.repository.create({
+      user_id,
+      sender_id,
+      amount,
+      description,
+      type
+    });
+
+    return this.repository.save(transfer);
   }
 
   async findStatementOperation({ statement_id, user_id }: IGetStatementOperationDTO): Promise<Statement | undefined> {
@@ -48,6 +92,12 @@ export class StatementsRepository implements IStatementsRepository {
     const balance = statement.reduce((acc, operation) => {
       if (operation.type === 'deposit') {
         return acc + operation.amount;
+      }else if(operation.type === 'transfer') {
+         if (operation.recipient_id=== undefined){
+        return acc + operation.amount;
+         } else {
+          return acc - operation.amount;
+         }
       } else {
         return acc - operation.amount;
       }
