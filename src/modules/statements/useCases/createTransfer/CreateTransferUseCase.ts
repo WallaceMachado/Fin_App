@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { IUsersRepository } from "../../../users/repositories/IUsersRepository";
 import { IStatementsRepository } from "../../repositories/IStatementsRepository";
-import { CreateStatementError } from "../createStatement/CreateStatementError";
+import { CreateTransferError } from "../createTransfer/CreateTransferError";
 import { ICreateStatementDTO } from "../createStatement/ICreateStatementDTO";
 import { ICreateTransferDTO } from "./ICreateTransferDTO";
 
@@ -22,23 +22,23 @@ class CreateTransferUseCase {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new CreateStatementError.UserNotFound();
+      throw new CreateTransferError.UserNotFound();
     }
 
     const recipientUser = await this.usersRepository.findById(recipient_id);
     if (!recipientUser) {
-      throw new CreateStatementError.UserNotFound();
+      throw new CreateTransferError.UserNotFound();
     }
 
     const senderUser = await this.usersRepository.findById(sender_id);
     if (!senderUser) {
-      throw new CreateStatementError.UserNotFound();
+      throw new CreateTransferError.UserNotFound();
     }
 
     const { balance } = await this.statementsRepository.getUserBalance({ user_id });
-    
+
     if (balance < amount) {
-      throw new CreateStatementError.InsufficientFunds()
+      throw new CreateTransferError.InsufficientFunds()
     }
 
     const transferCreate = await this.statementsRepository.createTransfer({
@@ -50,8 +50,8 @@ class CreateTransferUseCase {
       description
     });
 
-    const transferRecieve = await this.statementsRepository.receiveTransfer({
-      user_id:recipient_id,
+    const transferReceive = await this.statementsRepository.receiveTransfer({
+      user_id: recipient_id,
       recipient_id: 'null',
       sender_id,
       type,
@@ -60,13 +60,10 @@ class CreateTransferUseCase {
     });
 
 
+    const statementOperation = { transferCreate, transferReceive }
 
-
-
-const statementOperation = {transferCreate, transferRecieve}
-
-return statementOperation;
-}
+    return statementOperation;
+  }
 
 }
 

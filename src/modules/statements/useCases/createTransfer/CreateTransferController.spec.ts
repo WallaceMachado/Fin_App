@@ -39,17 +39,9 @@ describe('Create Statement Controller', () => {
       values('${iduser}', 'user', 'user@rentx.com', '${password}', 'now()', 'now()')
       `);
     //{ body: responseToken }
-    const responseUser = await request(app)
-      .post('/api/v1/sessions')
-      .send({
-        email: 'user@rentx.com',
-        password: 'user',
-      });
-
-
 
     adminToken = response.body.token;
-    userId = responseUser.body.id
+
 
 
   });
@@ -59,7 +51,7 @@ describe('Create Statement Controller', () => {
     await connection.close();
   });
 
-  it('Should be able Create Transfer type: deposit', async () => {
+  it('Should be able Create Transfer ', async () => {
 
 
    const deposit =  await request(app)
@@ -69,7 +61,7 @@ describe('Create Statement Controller', () => {
         authorization: `Bearer ${adminToken}`,
       });
 
-      
+
 
     const response = await request(app)
       .post(`/api/v1/statements/transfer/93bcd8af-5494-4e94-b139-0583d238f366`)
